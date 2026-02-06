@@ -1,0 +1,51 @@
+name: Build PS4 PKG
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Orbis Toolchain (Placeholder)
+      run: |
+        echo "Setting up Orbis Toolchain... This step assumes you have access to a pre-built toolchain or a method to install it."
+        # For a real scenario, you would download/install the Orbis Toolchain here.
+        # Example: wget https://example.com/orbis-toolchain.tar.gz
+        # tar -xzf orbis-toolchain.tar.gz -C /opt/
+        # export ORBISDEV=/opt/orbis-toolchain
+        # Add ORBISDEV to PATH
+        echo "ORBISDEV=/opt/orbis-toolchain" >> $GITHUB_ENV
+        echo "/opt/orbis-toolchain/bin" >> $GITHUB_PATH
+        # Create dummy create-eboot and mksfoex for workflow validation
+        mkdir -p /opt/orbis-toolchain/bin
+        echo '#!/bin/bash' > /opt/orbis-toolchain/bin/create-eboot
+        echo 'echo "Simulating create-eboot $1 $2"' >> /opt/orbis-toolchain/bin/create-eboot
+        chmod +x /opt/orbis-toolchain/bin/create-eboot
+        echo '#!/bin/bash' > /opt/orbis-toolchain/bin/mksfoex
+        echo 'echo "Simulating mksfoex $1 $2 $3 $4 $5 $6 $7 $8 $9"' >> /opt/orbis-toolchain/bin/mksfoex
+        chmod +x /opt/orbis-toolchain/bin/mksfoex
+        echo '#!/bin/bash' > /opt/orbis-toolchain/bin/orbis-pub-cmd
+        echo 'echo "Simulating orbis-pub-cmd $1 $2 $3 $4 $5 $6 $7 $8 $9"' >> /opt/orbis-toolchain/bin/orbis-pub-cmd
+        chmod +x /opt/orbis-toolchain/bin/orbis-pub-cmd
+        echo "Dummy toolchain setup complete. You will need to replace this with your actual toolchain setup."
+
+    - name: Build Project
+      run: |
+        cd auto_update_goldhen
+        make
+
+    - name: Upload PKG artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AutoUpdateGoldHEN-PKG
+        path: auto_update_goldhen/*.pkg
+        retention-days: 5
