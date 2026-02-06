@@ -1,0 +1,15 @@
+auto_update_goldhen/
+├── Makefile
+├── README.md
+├── include/
+│   └── common.h
+├── source/
+│   ├── main.cpp
+│   └── utils.cpp
+├── sce_sys/
+│   ├── icon0.png
+│   ├── pic0.png
+│   └── param.sfo (auto-generated)
+└── assets/
+    ├── payload.bin
+    └── goldhen.bin
